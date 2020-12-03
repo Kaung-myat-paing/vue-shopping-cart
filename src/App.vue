@@ -1,49 +1,41 @@
 <template>
   <v-app>
-    <v-app-bar app flat color="white">
-      <div class="d-inline-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <div class="my-3">
+      <v-app-bar app flat color="white" class="container">
+        <router-link to="/" style="text-decoration: none">
+          <div class="d-inline-flex align-center">
+            <v-img
+              alt="Vuetify Logo"
+              class="shrink mr-2"
+              contain
+              src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+              transition="scale-transition"
+              width="40"
+            />
 
-        <v-toolbar-title>Vuetify Shopping Cart</v-toolbar-title>
-      </div>
+            <v-toolbar-title>ACHIEVE</v-toolbar-title>
+          </div>
+        </router-link>
+        <v-spacer></v-spacer>
 
-      <v-spacer></v-spacer>
-
-      <v-btn
-        
-        target="_blank"
-        text
-      >
-        <v-icon>shopping_cart</v-icon>
-      </v-btn>
-    </v-app-bar>
+        <v-btn text to="/shopping-cart">
+          <v-icon>shopping_cart</v-icon>
+        </v-btn>
+      </v-app-bar>
+    </div>
 
     <v-main>
-      <home />
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import Home from "./components/home";
-
 export default {
   name: "App",
-
-  components: {
-    Home,
-  },
 
   data: () => ({
     //
   }),
-  
 };
 </script>
