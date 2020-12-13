@@ -14,7 +14,12 @@
     <div class="container pt-15">
       <p class="text-h6">FEATURED PRODUCTS</p>
       <v-row justify="center">
-        <v-col md="4" cols="12" v-for="product in productList" :key="product.id">
+        <v-col
+          md="4"
+          cols="12"
+          v-for="product in productList"
+          :key="product.id"
+        >
           <v-card max-width="374">
             <template slot="progress">
               <v-progress-linear
@@ -32,7 +37,13 @@
               <div class="pl-2 subtitle-1">$ {{ product.price }}</div>
               <v-spacer></v-spacer>
 
-              <v-btn dark small color="primary" outlined>
+              <v-btn
+                dark
+                small
+                color="primary"
+                outlined
+                @click="addToCart(product)"
+              >
                 <v-icon dark>add_shopping_cart</v-icon>
               </v-btn>
             </v-card-actions>
@@ -44,6 +55,8 @@
 </template>
 
 <script>
+import { store, mutations, storage } from "../store/store";
+
 export default {
   name: "HelloWorld",
 
@@ -67,6 +80,11 @@ export default {
   created() {
     this.getProducts();
   },
+  computed: {
+    cartList() {
+      return store.cart;
+    },
+  },
   methods: {
     async getProducts() {
       const contentful = require("contentful");
@@ -84,10 +102,29 @@ export default {
           const image = product.fields.image.fields.file.url;
           return { name, price, id, image };
         });
-        console.log("res", this.productList);
+        storage.saveProducts(this.productList);
       } catch (error) {
         console.error();
       }
+    },
+    addToCart(product) {
+      // add product to cart
+      let cartItem = { ...product, amount: 1 };
+      let isExistedItem = this.cartList.find((item) => item.id === cartItem.id);
+      if (isExistedItem) {
+        isExistedItem.amount += 1;
+        storage.saveCart(this.cartList);
+        mutations.setCartValue();
+      } else {
+        mutations.setCart(cartItem);
+      }
+
+      // add cart to localStorage
+      storage.saveCart(this.cartList);
+      // set cart values
+      mutations.setCartValue();
+      //open shopping cart
+      mutations.toggleDrawer();
     },
   },
 };
